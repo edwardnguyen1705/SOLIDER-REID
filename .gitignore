@@ -1,0 +1,6 @@
+checkpoints/
+log/
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
