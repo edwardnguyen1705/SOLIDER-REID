@@ -86,16 +86,56 @@ _C.INPUT = CN()
 _C.INPUT.SIZE_TRAIN = [384, 128]
 # Size of the image during test
 _C.INPUT.SIZE_TEST = [384, 128]
-# Random probability for image horizontal flip
-_C.INPUT.PROB = 0.5
-# Random probability for random erasing
-_C.INPUT.RE_PROB = 0.5
 # Values to be used for image normalization
 _C.INPUT.PIXEL_MEAN = [0.485, 0.456, 0.406]
 # Values to be used for image normalization
 _C.INPUT.PIXEL_STD = [0.229, 0.224, 0.225]
+
+# `True` if cropping is used for data augmentation during training
+_C.INPUT.CROP = CN({"ENABLED": False})
+# Size of the image cropped
+_C.INPUT.CROP.SIZE = [224, 224]
+# Size of the origin size cropped
+_C.INPUT.CROP.SCALE = [0.16, 1]
+# Aspect ratio of the origin aspect ratio cropped
+_C.INPUT.CROP.RATIO = [3./4., 4./3.]
+
+# Random probability for image horizontal flip
+_C.INPUT.FLIP = CN({"ENABLED": False})
+_C.INPUT.FLIP.PROB = 0.5
+
 # Value of padding size
-_C.INPUT.PADDING = 10
+_C.INPUT.PADDING = CN({"ENABLED": False})
+_C.INPUT.PADDING.MODE = 'constant'
+_C.INPUT.PADDING.SIZE = 10
+
+# Random color jitter
+_C.INPUT.CJ = CN({"ENABLED": False})
+_C.INPUT.CJ.PROB = 0.5
+_C.INPUT.CJ.BRIGHTNESS = 0.15
+_C.INPUT.CJ.CONTRAST = 0.15
+_C.INPUT.CJ.SATURATION = 0.1
+_C.INPUT.CJ.HUE = 0.1
+
+# Random Affine
+_C.INPUT.AFFINE = CN({"ENABLED": False})
+
+# Auto augmentation
+_C.INPUT.AUTOAUG = CN({"ENABLED": False})
+_C.INPUT.AUTOAUG.PROB = 0.0
+
+# Augmix augmentation
+_C.INPUT.AUGMIX = CN({"ENABLED": False})
+_C.INPUT.AUGMIX.PROB = 0.0
+
+# Random Erasing
+_C.INPUT.REA = CN({"ENABLED": False})
+_C.INPUT.REA.PROB = 0.5
+_C.INPUT.REA.VALUE = None
+# Random Patch
+_C.INPUT.RPT = CN({"ENABLED": False})
+_C.INPUT.RPT.PROB = 0.5
+
 
 # -----------------------------------------------------------------------------
 # Dataset
