@@ -3,17 +3,24 @@ import torchvision.transforms as T
 from torch.utils.data import DataLoader
 
 from .bases import ImageDataset
-from timm.data.random_erasing import RandomErasing
+# from timm.data.random_erasing import RandomErasing
 from .sampler import RandomIdentitySampler, RandomIdentitySampler_IdUniform
-from .market1501 import Market1501
-from .msmt17 import MSMT17
+from .transforms.build import build_transforms
+
 from .sampler_ddp import RandomIdentitySampler_DDP
 import torch.distributed as dist
 from .mm import MM
+
+from .market1501 import Market1501
+from .msmt17 import MSMT17
+from .ccdmmpsssss import CCDMMPSSSSS
+
+
 __factory = {
     'market1501': Market1501,
     'msmt17': MSMT17,
     'mm': MM,
+    'ccdmmpsssss': CCDMMPSSSSS,
 }
 
 def train_collate_fn(batch):
@@ -33,21 +40,8 @@ def val_collate_fn(batch):
     return torch.stack(imgs, dim=0), pids, camids, camids_batch, viewids, img_paths
 
 def make_dataloader(cfg):
-    train_transforms = T.Compose([
-            T.Resize(cfg.INPUT.SIZE_TRAIN, interpolation=3),
-            T.RandomHorizontalFlip(p=cfg.INPUT.PROB),
-            T.Pad(cfg.INPUT.PADDING),
-            T.RandomCrop(cfg.INPUT.SIZE_TRAIN),
-            T.ToTensor(),
-            T.Normalize(mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD),
-            RandomErasing(probability=cfg.INPUT.RE_PROB, mode='pixel', max_count=1, device='cpu'),
-        ])
-
-    val_transforms = T.Compose([
-        T.Resize(cfg.INPUT.SIZE_TEST),
-        T.ToTensor(),
-        T.Normalize(mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD)
-    ])
+    train_transforms = build_transforms(cfg, is_train=True)
+    val_transforms = build_transforms(cfg, is_train=False)
 
     num_workers = cfg.DATALOADER.NUM_WORKERS
 
