@@ -1,0 +1,80 @@
+MODEL:
+  PRETRAIN_HW_RATIO: 2
+  METRIC_LOSS_TYPE: 'triplet'
+  IF_LABELSMOOTH: 'off'
+  IF_WITH_CENTER: 'no'
+  NAME: 'transformer'
+  NO_MARGIN: True
+  DEVICE_ID: ('0')
+  TRANSFORMER_TYPE: 'swin_small_patch4_window7_224'
+  STRIDE_SIZE: [16, 16]
+
+INPUT:
+  SIZE_TRAIN: [256, 128]
+  SIZE_TEST: [256, 128]
+  PIXEL_MEAN: [127.5, 127.5, 127.5]
+  PIXEL_STD: [127.5, 127.5, 127.5]
+
+  AUGMIX:
+    ENABLED: true
+    PROB: 0.5
+  AUTOAUG:
+    ENABLED: true
+    PROB: 0.1
+  AFFINE:
+    ENABLED: true
+  FLIP:
+    ENABLED: true
+    PROB: 0.5
+  PADDING:
+    ENABLED: true
+    MODE: constant
+    SIZE: 10
+  CJ:
+    ENABLED: true
+    PROB: 0.5
+    BRIGHTNESS: 0.15
+    CONTRAST: 0.1
+    HUE: 0.
+    SATURATION: 0.
+  REA:
+    ENABLED: true
+    PROB: 0.5
+    VALUE: "random"
+  RPT:
+    ENABLED: true
+    PROB: 0.25
+
+DATASETS:
+  NAMES: ('ccdmmpsssss')
+  ROOT_DIR: ('/home/workspace/Datasets/person_reid')
+
+DATALOADER:
+  SAMPLER: 'softmax_triplet'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+
+SOLVER:
+  OPTIMIZER_NAME: 'SGD'
+  MAX_EPOCHS: 30
+  BASE_LR: 0.0008
+  WARMUP_EPOCHS: 10
+  IMS_PER_BATCH: 64
+  WARMUP_METHOD: 'cosine'
+  LARGE_FC_LR: False
+  CHECKPOINT_PERIOD: 30
+  LOG_PERIOD: 20
+  EVAL_PERIOD: 5
+  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY_BIAS: 1e-4
+  BIAS_LR_FACTOR: 2
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 128
+  RE_RANKING: False
+  WEIGHT: ''
+  NECK_FEAT: 'before'
+  FEAT_NORM: 'yes'
+
+OUTPUT_DIR: './log/ccdmmpsssss/swin_small_30e'
